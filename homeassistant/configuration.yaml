@@ -1,0 +1,73 @@
+# Home Assistant — kendali dan otomasi.
+# Grafana memantau; berkas ini tidak pernah menyentuh urusan dasbor pemantauan.
+
+default_config:
+
+homeassistant:
+  name: !secret rumah_nama
+  time_zone: Asia/Makassar
+  unit_system: metric
+  currency: IDR
+  country: ID
+  packages: !include_dir_named packages
+
+# Di belakang terowongan keluar. Tidak ada port yang dibuka di jaringan pelanggan.
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 127.0.0.1
+    - ::1
+  ip_ban_enabled: true
+  login_attempts_threshold: 5
+
+# --- Riwayat operasional. Skema milik Home Assistant, umurnya pendek. ---
+# Analitik jangka panjang TIDAK dibangun di atas tabel ini: skemanya berubah
+# antar versi, dan dasbor yang bergantung padanya akan pecah pada pembaruan rutin.
+recorder:
+  db_url: !secret pg_url
+  purge_keep_days: 14
+  commit_interval: 5
+  auto_purge: true
+  exclude:
+    domains:
+      - automation
+      - update
+      - script
+      - persistent_notification
+    entity_globs:
+      - sensor.*_uptime
+      - sensor.*_rssi
+      - sensor.*_signal_strength
+      - sensor.*_last_seen
+
+mqtt:
+  # Perangkat menerbitkan ke broker lebih dulu, baru dibaca Home Assistant.
+  # Penyerap kita membaca broker yang sama secara mandiri.
+  broker: 127.0.0.1
+  port: 1883
+  username: !secret mqtt_user
+  password: !secret mqtt_password
+  discovery: true
+  discovery_prefix: homeassistant
+
+logger:
+  default: warning
+  logs:
+    homeassistant.components.recorder: info
+    homeassistant.components.shelly: info
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# Dasbor kendali disusun dari berkas, bukan dari antarmuka —
+# supaya dapat diversikan di git dan disalin ke rumah berikutnya.
+lovelace:
+  mode: storage
+  dashboards:
+    tamu:
+      mode: yaml
+      title: Tamu
+      icon: mdi:account
+      show_in_sidebar: true
+      filename: dashboards/tamu.yaml

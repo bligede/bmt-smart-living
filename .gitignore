@@ -1,0 +1,30 @@
+.env
+homeassistant/secrets.yaml
+esphome/secrets.yaml
+cloudflared/config.yml
+cloudflared/creds.json
+mosquitto/config/passwd
+
+# Berkas kerja Home Assistant
+homeassistant/.storage/
+homeassistant/*.db*
+homeassistant/*.log*
+homeassistant/tts/
+homeassistant/deps/
+homeassistant/.cloud/
+
+# Berkas kerja ESPHome
+esphome/.esphome/
+esphome/build/
+
+# Berkas kerja Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Berkas kerja sistem
+.DS_Store
+Thumbs.db
+*.swp

@@ -1,0 +1,29 @@
+# Script untuk urutan berjeda. Scene tidak punya waktu; script punya.
+
+sambut_kedatangan:
+  alias: Sambut kedatangan
+  mode: restart
+  sequence:
+    - service: light.turn_on
+      target: { entity_id: light.teras_utama }
+      data: { brightness: 255 }
+    - delay: "00:00:05"
+    - service: scene.turn_on
+      target: { entity_id: scene.ruangkeluarga_santai }
+    - service: climate.set_temperature
+      target: { entity_id: climate.ruangkeluarga_ac }
+      data: { temperature: 24 }
+      continue_on_error: true
+
+siapkan_untuk_kosong:
+  alias: Siapkan untuk rumah kosong
+  mode: single
+  sequence:
+    - service: scene.turn_on
+      target: { entity_id: scene.semua_mati }
+    - service: climate.turn_off
+      target: { entity_id: all }
+      continue_on_error: true
+    - service: switch.turn_off
+      target: { entity_id: switch.pemanas_air }
+      continue_on_error: true

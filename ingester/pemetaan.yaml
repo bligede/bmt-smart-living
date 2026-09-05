@@ -1,0 +1,98 @@
+# Pemetaan topik MQTT ke baris telemetri.
+#
+# Tiga keluarga perangkat menerbitkan dengan bentuk yang berbeda-beda.
+# Berkas ini yang menyatukannya, supaya kode penyerap tetap sederhana
+# dan penambahan model baru tidak menuntut menyunting Python.
+#
+# pola      : topik MQTT, mendukung + (satu ruas) dan # (sisa ruas)
+# perangkat : nama entitas. {1}, {2}, ... diganti ruas wildcard sesuai urutan
+# format    : json | angka
+# medan     : untuk json — kunci yang diambil. Boleh bersarang: "aenergy.total"
+# metrik    : nama metrik yang disimpan
+# skala     : pengali opsional, mis. 0.001 untuk Wh menjadi kWh
+
+pemetaan:
+
+  # ---------------------------------------------------------------- Shelly Gen2+
+  # Shelly menerbitkan JSON ke <awalan>/status/<komponen>
+  - pola: "shelly/+/status/switch:0"
+    perangkat: "{1}"
+    format: json
+    medan: apower
+    metrik: daya
+
+  - pola: "shelly/+/status/switch:0"
+    perangkat: "{1}"
+    format: json
+    medan: "aenergy.total"
+    metrik: energi
+    skala: 0.001            # Wh -> kWh
+
+  - pola: "shelly/+/status/temperature:0"
+    perangkat: "{1}"
+    format: json
+    medan: tC
+    metrik: suhu
+
+  - pola: "shelly/+/status/humidity:0"
+    perangkat: "{1}"
+    format: json
+    medan: rh
+    metrik: kelembapan
+
+  - pola: "shelly/+/status/devicepower:0"
+    perangkat: "{1}"
+    format: json
+    medan: "battery.percent"
+    metrik: baterai
+
+  - pola: "shelly/+/status/illuminance:0"
+    perangkat: "{1}"
+    format: json
+    medan: lux
+    metrik: lux
+
+  - pola: "shelly/+/status/em:0"
+    perangkat: "{1}"
+    format: json
+    medan: total_act_power
+    metrik: daya
+
+  # ---------------------------------------------------------------- ESPHome
+  # ESPHome menerbitkan nilai polos ke <nama>/sensor/<id>/state
+  - pola: "+/sensor/+/state"
+    perangkat: "{1}"
+    format: angka
+    metrik: "{2}"           # nama sensor dipakai apa adanya sebagai metrik
+
+  # ---------------------------------------------------------------- Tasmota
+  # Tasmota menerbitkan JSON gabungan ke tele/<nama>/SENSOR
+  - pola: "tele/+/SENSOR"
+    perangkat: "{1}"
+    format: json
+    medan: "ENERGY.Power"
+    metrik: daya
+
+  - pola: "tele/+/SENSOR"
+    perangkat: "{1}"
+    format: json
+    medan: "ENERGY.Total"
+    metrik: energi
+
+  - pola: "tele/+/SENSOR"
+    perangkat: "{1}"
+    format: json
+    medan: "AM2301.Temperature"
+    metrik: suhu
+
+  - pola: "tele/+/SENSOR"
+    perangkat: "{1}"
+    format: json
+    medan: "AM2301.Humidity"
+    metrik: kelembapan
+
+# Topik yang dianggap kejadian, bukan telemetri.
+kejadian:
+  - pola: "rumah/kejadian/+"
+    jenis: "{1}"
+    format: json

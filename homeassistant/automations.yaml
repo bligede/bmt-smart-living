@@ -1,0 +1,3 @@
+# Otomasi inti dipecah ke berkas paket per topik. Berkas ini sengaja dibiarkan
+# kosong supaya antarmuka Home Assistant tidak menimpa otomasi yang diversikan.
+[]

@@ -1,0 +1,42 @@
+# Scene menyatakan KEADAAN AKHIR, bukan urutan. Seluruh perangkat berpindah
+# bersamaan. Kalau butuh jeda antar langkah, itu script — bukan scene.
+
+- id: kamartidur_malam
+  name: Kamar tidur malam
+  entities:
+    light.kamartidur_utama: { state: "on", brightness: 40, color_temp_kelvin: 2200 }
+    light.kamartidur_baca:  { state: "off" }
+    light.kamartidur_strip: { state: "on", brightness: 15 }
+    cover.kamartidur_tirai: closed
+
+- id: kamartidur_bangun
+  name: Kamar tidur bangun
+  entities:
+    light.kamartidur_utama: { state: "on", brightness: 180, color_temp_kelvin: 4000 }
+    light.kamartidur_strip: { state: "off" }
+    cover.kamartidur_tirai: open
+
+- id: ruangkeluarga_terang
+  name: Ruang keluarga terang
+  entities:
+    light.ruangkeluarga_utama: { state: "on", brightness: 255, color_temp_kelvin: 4000 }
+
+- id: ruangkeluarga_santai
+  name: Ruang keluarga santai
+  entities:
+    light.ruangkeluarga_utama: { state: "on", brightness: 110, color_temp_kelvin: 2700 }
+
+- id: ruangkeluarga_malam
+  name: Ruang keluarga malam
+  entities:
+    light.ruangkeluarga_utama: { state: "on", brightness: 30, color_temp_kelvin: 2200 }
+
+- id: semua_mati
+  name: Semua mati
+  entities:
+    light.kamartidur_utama:    { state: "off" }
+    light.kamartidur_baca:     { state: "off" }
+    light.kamartidur_strip:    { state: "off" }
+    light.ruangkeluarga_utama: { state: "off" }
+    light.dapur_utama:         { state: "off" }
+    light.teras_utama:         { state: "off" }

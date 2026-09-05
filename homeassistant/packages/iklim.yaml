@@ -1,0 +1,175 @@
+# Paket iklim: kipas kamar mandi, kendali AC, pemanas air.
+#
+# Tiga kebiasaan yang berlaku di seluruh otomasi berkas ini:
+#   1. mode: single  — pemicu berdekatan tidak menjalankan hal yang sama berkali-kali
+#   2. periksa unavailable — satu sensor mati tidak boleh menggagalkan semuanya
+#   3. batas waktu pada apa pun yang menyala — sensor macet tidak menyalakan selamanya
+
+input_number:
+  ac_batas_suhu_terendah:
+    name: Batas suhu AC terendah
+    min: 18
+    max: 26
+    step: 1
+    initial: 22
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer-low
+
+input_boolean:
+  mode_tamu:
+    name: Mode tamu
+    icon: mdi:account-clock
+  rumah_dihuni:
+    name: Rumah dihuni
+    icon: mdi:home-account
+
+automation:
+
+  # ---------------------------------------------------------- kamar mandi
+  - id: kipas_kamarmandi_nyala
+    alias: Kipas kamar mandi menyala saat lembap
+    mode: single
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.kamarmandi_kelembapan
+        above: 70
+        for: "00:02:00"
+    condition:
+      - condition: template
+        value_template: >
+          {{ states('switch.kamarmandi_kipas') not in ['unknown', 'unavailable'] }}
+    action:
+      - service: switch.turn_on
+        target: { entity_id: switch.kamarmandi_kipas }
+
+  - id: kipas_kamarmandi_mati
+    alias: Kipas kamar mandi berhenti sendiri
+    mode: single
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.kamarmandi_kelembapan
+        below: 60
+        for: "00:05:00"
+      # Batas atas: kalau sensor macet, kipas tetap berhenti setelah 45 menit
+      - platform: state
+        entity_id: switch.kamarmandi_kipas
+        to: "on"
+        for: "00:45:00"
+    action:
+      - service: switch.turn_off
+        target: { entity_id: switch.kamarmandi_kipas }
+
+  # ---------------------------------------------------------- AC
+  # Inframerah bersifat satu arah. Pengukur arus pada sirkuit AC yang
+  # memberi tahu apakah perintahnya benar-benar diterima.
+  - id: ac_mati_saat_kosong
+    alias: AC mati saat ruangan kosong
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.kamartidur_gerak
+        to: "off"
+        for: "00:20:00"
+    condition:
+      - condition: numeric_state
+        entity_id: sensor.kamartidur_ac_daya
+        above: 50          # AC memang sedang menyala, bukan sekadar dianggap menyala
+    action:
+      - service: climate.turn_off
+        target: { entity_id: climate.kamartidur_ac }
+      - service: mqtt.publish
+        data:
+          topic: rumah/kejadian/hemat
+          payload: >
+            {"perangkat": "climate.kamartidur_ac", "tingkat": "info",
+             "sebab": "ruangan kosong 20 menit"}
+
+  - id: ac_mati_saat_pintu_terbuka
+    alias: AC mati saat pintu atau jendela terbuka
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.kamartidur_pintu
+        to: "on"
+        for: "00:03:00"
+    condition:
+      - condition: numeric_state
+        entity_id: sensor.kamartidur_ac_daya
+        above: 50
+    action:
+      - service: climate.turn_off
+        target: { entity_id: climate.kamartidur_ac }
+
+  - id: ac_batas_suhu_tamu
+    alias: Tegakkan batas suhu AC saat mode tamu
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: climate.kamartidur_ac
+        attribute: temperature
+    condition:
+      - condition: state
+        entity_id: input_boolean.mode_tamu
+        state: "on"
+      - condition: template
+        value_template: >
+          {{ (state_attr('climate.kamartidur_ac', 'temperature') | float(25))
+             < states('input_number.ac_batas_suhu_terendah') | float(22) }}
+    action:
+      - service: climate.set_temperature
+        target: { entity_id: climate.kamartidur_ac }
+        data:
+          temperature: "{{ states('input_number.ac_batas_suhu_terendah') | float(22) }}"
+
+  - id: ac_perintah_tidak_sampai
+    alias: Peringatkan bila perintah AC tidak sampai
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: climate.kamartidur_ac
+        to: "cool"
+        for: "00:03:00"
+    condition:
+      # Perintah dikirim tiga menit lalu, tetapi sirkuitnya tidak menarik arus
+      - condition: numeric_state
+        entity_id: sensor.kamartidur_ac_daya
+        below: 30
+    action:
+      - service: mqtt.publish
+        data:
+          topic: rumah/kejadian/ac_tidak_merespons
+          payload: >
+            {"perangkat": "climate.kamartidur_ac", "tingkat": "penting",
+             "sebab": "perintah terkirim tetapi sirkuit tidak menarik arus"}
+
+  # ---------------------------------------------------------- pemanas air
+  - id: pemanas_air_terjadwal
+    alias: Pemanas air terjadwal
+    mode: single
+    trigger:
+      - platform: time
+        at: "05:30:00"
+      - platform: time
+        at: "16:30:00"
+    condition:
+      - condition: state
+        entity_id: input_boolean.rumah_dihuni
+        state: "on"
+    action:
+      - service: switch.turn_on
+        target: { entity_id: switch.pemanas_air }
+
+  - id: pemanas_air_berhenti
+    alias: Pemanas air berhenti
+    mode: single
+    trigger:
+      - platform: time
+        at: "07:00:00"
+      - platform: time
+        at: "18:30:00"
+      - platform: state
+        entity_id: input_boolean.rumah_dihuni
+        to: "off"
+    action:
+      - service: switch.turn_off
+        target: { entity_id: switch.pemanas_air }

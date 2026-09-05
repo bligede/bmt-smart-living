@@ -1,0 +1,10 @@
+# Terowongan keluar. Tidak ada port yang dibuka di jaringan pelanggan.
+tunnel: RUMAH_ID
+credentials-file: /etc/cloudflared/creds.json
+
+ingress:
+  - hostname: RUMAH_ID.internal.bmt.id
+    service: http://127.0.0.1:8123      # Home Assistant
+  - hostname: grafana-RUMAH_ID.internal.bmt.id
+    service: http://127.0.0.1:3000      # Grafana, baca saja
+  - service: http_status:404

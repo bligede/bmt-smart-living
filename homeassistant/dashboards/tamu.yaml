@@ -1,0 +1,64 @@
+# Dasbor tamu. Empat kartu besar, tanpa pengaturan.
+# Uji kelayakannya: serahkan ke orang yang belum pernah melihatnya dan
+# jangan katakan apa pun. Bila ia perlu bertanya, dasbornya belum selesai.
+
+title: Tamu
+views:
+  - title: Rumah
+    path: rumah
+    type: sections
+    max_columns: 2
+    sections:
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Lampu
+          - type: tile
+            entity: light.ruangkeluarga_utama
+            name: Ruang keluarga
+            features: [{ type: light-brightness }]
+          - type: tile
+            entity: light.kamartidur_utama
+            name: Kamar tidur
+            features: [{ type: light-brightness }]
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Suasana
+          - type: horizontal-stack
+            cards:
+              - type: button
+                name: Terang
+                icon: mdi:white-balance-sunny
+                tap_action: { action: perform-action, perform_action: scene.turn_on,
+                              target: { entity_id: scene.ruangkeluarga_terang } }
+              - type: button
+                name: Santai
+                icon: mdi:sofa
+                tap_action: { action: perform-action, perform_action: scene.turn_on,
+                              target: { entity_id: scene.ruangkeluarga_santai } }
+              - type: button
+                name: Malam
+                icon: mdi:weather-night
+                tap_action: { action: perform-action, perform_action: scene.turn_on,
+                              target: { entity_id: scene.ruangkeluarga_malam } }
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Pendingin
+          - type: thermostat
+            entity: climate.ruangkeluarga_ac
+            features: [{ type: climate-hvac-modes, hvac_modes: [cool, "off"] }]
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Bantuan
+          - type: markdown
+            content: >
+              Ada yang tidak berfungsi? Hubungi pengelola di nomor yang tertera
+              pada kartu tamu. Seluruh saklar dinding tetap berfungsi seperti
+              saklar biasa, walaupun layar ini sedang tidak menyala.

@@ -1,0 +1,191 @@
+{
+  "uid": "rumah-utama",
+  "title": "Rumah — Pemantauan",
+  "tags": ["bmt", "rumah"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": false,
+  "refresh": "5m",
+  "time": { "from": "now-7d", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "type": "barchart",
+      "title": "Pemakaian listrik harian per alat",
+      "description": "Dari tampilan agregat, bukan tabel mentah.",
+      "gridPos": { "h": 9, "w": 24, "x": 0, "y": 0 },
+      "datasource": { "type": "postgres", "uid": "${DS}" },
+      "fieldConfig": {
+        "defaults": { "unit": "kwatth", "custom": { "stacking": { "mode": "normal" } } },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "table", "placement": "right", "calcs": ["sum"] } },
+      "targets": [
+        {
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT hari AS \"time\", perangkat AS metric, kwh\nFROM energi_harian\nWHERE $__timeFilter(hari) AND kwh > 0\nORDER BY 1"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Suhu per ruang",
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 9 },
+      "datasource": { "type": "postgres", "uid": "${DS}" },
+      "fieldConfig": {
+        "defaults": { "unit": "celsius", "min": 18, "max": 36 },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT jam AS \"time\", perangkat AS metric, rerata\nFROM telemetri_jam\nWHERE metrik = 'suhu' AND $__timeFilter(jam)\nORDER BY 1"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Kelembapan per ruang",
+      "description": "Lonjakan di kamar mandi wajar setelah mandi. Yang perlu dilihat adalah seberapa cepat turunnya — itu ukuran apakah kipas otomatis bekerja.",
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 9 },
+      "datasource": { "type": "postgres", "uid": "${DS}" },
+      "fieldConfig": {
+        "defaults": { "unit": "humidity", "min": 30, "max": 100 },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT jam AS \"time\", perangkat AS metric, rerata\nFROM telemetri_jam\nWHERE metrik = 'kelembapan' AND $__timeFilter(jam)\nORDER BY 1"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Perangkat terpasang",
+      "gridPos": { "h": 5, "w": 6, "x": 0, "y": 18 },
+      "datasource": { "type": "postgres", "uid": "${DS}" },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value" },
+      "targets": [
+        {
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT count(*)::int AS \"Aktif\" FROM perangkat WHERE aktif"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Telemetri terakhir masuk",
+      "description": "Bila angkanya melewati satu jam, penyerap atau broker sedang bermasalah.",
+      "gridPos": { "h": 5, "w": 6, "x": 6, "y": 18 },
+      "datasource": { "type": "postgres", "uid": "${DS}" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 900 },
+              { "color": "red", "value": 3600 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" },
+      "targets": [
+        {
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT extract(epoch FROM now() - max(jam))::int AS \"Detik lalu\"\nFROM telemetri_jam"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "table",
+      "title": "Level baterai",
+      "description": "Diganti saat kunjungan terjadwal, bukan saat sudah mati.",
+      "gridPos": { "h": 10, "w": 12, "x": 12, "y": 18 },
+      "datasource": { "type": "postgres", "uid": "${DS}" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": { "cellOptions": { "type": "gauge", "mode": "gradient" } },
+          "min": 0,
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "orange", "value": 25 },
+              { "color": "green", "value": 50 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT DISTINCT ON (perangkat)\n       perangkat AS \"Perangkat\",\n       rerata     AS \"Baterai\"\nFROM telemetri_jam\nWHERE metrik = 'baterai' AND jam > now() - INTERVAL '7 days'\nORDER BY perangkat, jam DESC"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "table",
+      "title": "Kejadian 30 hari terakhir",
+      "gridPos": { "h": 10, "w": 12, "x": 0, "y": 23 },
+      "datasource": { "type": "postgres", "uid": "${DS}" },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Tingkat" },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  { "type": "value", "options": { "kritis": { "color": "red", "index": 0 },
+                                                   "penting": { "color": "orange", "index": 1 },
+                                                   "info": { "color": "text", "index": 2 } } }
+                ]
+              },
+              { "id": "custom.cellOptions", "value": { "type": "color-text" } }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT waktu AS \"Waktu\", jenis AS \"Jenis\", tingkat AS \"Tingkat\",\n       coalesce(perangkat, '—') AS \"Perangkat\"\nFROM kejadian\nWHERE waktu > now() - INTERVAL '30 days'\nORDER BY waktu DESC\nLIMIT 200"
+        }
+      ]
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "DS",
+        "type": "datasource",
+        "query": "postgres",
+        "current": { "text": "Rumah", "value": "Rumah" },
+        "hide": 2
+      }
+    ]
+  }
+}

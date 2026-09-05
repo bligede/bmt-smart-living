@@ -1,0 +1,92 @@
+# Paket penerangan: tombol adegan, lampu teras otomatis, reset antar tamu.
+
+automation:
+
+  # Tombol Bluetooth di samping ranjang. Sekali tekan mematikan seluruh lampu.
+  - id: tombol_samping_ranjang
+    alias: Tombol samping ranjang
+    mode: single
+    trigger:
+      - platform: event
+        event_type: shelly_blu.button
+        event_data:
+          device: kamartidur_tombol
+    action:
+      - choose:
+          - conditions: "{{ trigger.event.data.event == 'single' }}"
+            sequence:
+              - service: scene.turn_on
+                target: { entity_id: scene.semua_mati }
+          - conditions: "{{ trigger.event.data.event == 'double' }}"
+            sequence:
+              - service: scene.turn_on
+                target: { entity_id: scene.kamartidur_malam }
+          - conditions: "{{ trigger.event.data.event == 'long' }}"
+            sequence:
+              - service: cover.toggle
+                target: { entity_id: cover.kamartidur_tirai }
+
+  # Lampu teras mengikuti terang sesungguhnya, bukan jam dinding.
+  - id: teras_menyala_saat_gelap
+    alias: Lampu teras menyala saat gelap
+    mode: single
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.teras_lux
+        below: 15
+        for: "00:05:00"
+    condition:
+      - condition: template
+        value_template: "{{ states('light.teras_utama') not in ['unknown','unavailable'] }}"
+    action:
+      - service: light.turn_on
+        target: { entity_id: light.teras_utama }
+        data: { brightness: 100 }
+
+  - id: teras_terang_saat_ada_gerak
+    alias: Teras terang saat ada yang datang
+    mode: restart
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.teras_gerak
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: light.teras_utama
+        state: "on"
+    action:
+      - service: light.turn_on
+        target: { entity_id: light.teras_utama }
+        data: { brightness: 255 }
+      - delay: "00:03:00"
+      - service: light.turn_on
+        target: { entity_id: light.teras_utama }
+        data: { brightness: 100 }
+
+  - id: teras_mati_larut
+    alias: Lampu teras mati larut malam
+    mode: single
+    trigger:
+      - platform: time
+        at: "23:00:00"
+    action:
+      - service: light.turn_off
+        target: { entity_id: light.teras_utama }
+
+  # Antar tamu: kembalikan sistem ke keadaan awal tanpa disentuh pengelola.
+  - id: reset_antar_tamu
+    alias: Reset antar tamu
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: input_boolean.mode_tamu
+        to: "off"
+    action:
+      - service: scene.turn_on
+        target: { entity_id: scene.semua_mati }
+      - service: input_number.set_value
+        target: { entity_id: input_number.ac_batas_suhu_terendah }
+        data: { value: 22 }
+      - service: cover.open_cover
+        target: { entity_id: cover.kamartidur_tirai }
+        continue_on_error: true

@@ -1,0 +1,186 @@
+# Paket keamanan: alarm keselamatan, kunci pintu, kedatangan, mode kosong.
+# Setiap kejadian penting diterbitkan ke MQTT supaya masuk tabel kejadian —
+# dan dari sana ikut terkirim ke server pusat.
+
+automation:
+
+  # ---------------------------------------------------------- keselamatan
+  - id: alarm_gas
+    alias: Alarm gas LPG
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.dapur_gas
+        to: "on"
+    action:
+      - service: mqtt.publish
+        data:
+          topic: rumah/kejadian/gas
+          payload: '{"perangkat": "binary_sensor.dapur_gas", "tingkat": "kritis"}'
+      - service: notify.persistent_notification
+        data:
+          title: Kebocoran gas terdeteksi
+          message: Detektor gas dapur menyala. Periksa segera.
+      # Matikan colokan di dapur, jangan sampai ada percikan
+      - service: switch.turn_off
+        target: { entity_id: switch.dapur_colokan }
+        continue_on_error: true
+
+  - id: alarm_asap
+    alias: Alarm asap
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.koridor_asap
+        to: "on"
+    action:
+      - service: mqtt.publish
+        data:
+          topic: rumah/kejadian/asap
+          payload: '{"perangkat": "binary_sensor.koridor_asap", "tingkat": "kritis"}'
+      - service: light.turn_on
+        target: { entity_id: all }
+        data: { brightness: 255 }
+        continue_on_error: true
+
+  - id: alarm_bocor_air
+    alias: Alarm kebocoran air
+    mode: single
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.dapur_bocor
+          - binary_sensor.kamarmandi_bocor
+        to: "on"
+    action:
+      - service: mqtt.publish
+        data:
+          topic: rumah/kejadian/bocor_air
+          payload: >
+            {"perangkat": "{{ trigger.entity_id }}", "tingkat": "kritis"}
+      - service: switch.turn_off
+        target: { entity_id: switch.dapur_colokan }
+        continue_on_error: true
+
+  # ---------------------------------------------------------- kunci pintu
+  - id: kedatangan_dengan_kode
+    alias: Sambut kedatangan saat kunci dibuka
+    mode: restart
+    trigger:
+      - platform: state
+        entity_id: lock.pintumasuk
+        to: unlocked
+    condition:
+      - condition: sun
+        after: sunset
+    action:
+      - service: script.sambut_kedatangan
+      - service: input_boolean.turn_on
+        target: { entity_id: input_boolean.rumah_dihuni }
+
+  - id: baterai_kunci_lemah
+    alias: Peringatan baterai kunci lemah
+    mode: single
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.pintumasuk_baterai
+        below: 25
+    action:
+      - service: mqtt.publish
+        data:
+          topic: rumah/kejadian/baterai_lemah
+          payload: >
+            {"perangkat": "lock.pintumasuk", "tingkat": "penting",
+             "sisa": {{ states('sensor.pintumasuk_baterai') | int(0) }}}
+
+  # Berlaku untuk seluruh perangkat berbaterai, bukan hanya kunci
+  - id: baterai_perangkat_lemah
+    alias: Peringatan baterai perangkat lemah
+    mode: single
+    trigger:
+      - platform: numeric_state
+        entity_id:
+          - sensor.kamartidur_suhu_baterai
+          - sensor.kamarmandi_suhu_baterai
+          - sensor.kamartidur_gerak_baterai
+          - sensor.teras_gerak_baterai
+          - sensor.pintumasuk_kontak_baterai
+        below: 20
+    action:
+      - service: mqtt.publish
+        data:
+          topic: rumah/kejadian/baterai_lemah
+          payload: >
+            {"perangkat": "{{ trigger.entity_id }}", "tingkat": "info",
+             "sisa": {{ trigger.to_state.state | int(0) }}}
+
+  # ---------------------------------------------------------- mode kosong
+  - id: rumah_jadi_kosong
+    alias: Rumah menjadi kosong
+    mode: single
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.kamartidur_gerak
+          - binary_sensor.ruangkeluarga_gerak
+        to: "off"
+        for: "01:00:00"
+    condition:
+      - condition: template
+        value_template: >
+          {{ states('binary_sensor.kamartidur_gerak') == 'off'
+             and states('binary_sensor.ruangkeluarga_gerak') == 'off' }}
+    action:
+      - service: input_boolean.turn_off
+        target: { entity_id: input_boolean.rumah_dihuni }
+      - service: script.siapkan_untuk_kosong
+
+  - id: gerak_saat_kosong
+    alias: Ada gerakan saat rumah kosong
+    mode: single
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.kamartidur_gerak
+          - binary_sensor.ruangkeluarga_gerak
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.rumah_dihuni
+        state: "off"
+    action:
+      - service: mqtt.publish
+        data:
+          topic: rumah/kejadian/gerak_saat_kosong
+          payload: >
+            {"perangkat": "{{ trigger.entity_id }}", "tingkat": "penting"}
+
+  # ---------------------------------------------------------- listrik
+  - id: padam_listrik
+    alias: PLN padam terdeteksi
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.ups_daya_listrik
+        to: "off"
+    action:
+      - service: mqtt.publish
+        data:
+          topic: rumah/kejadian/padam_listrik
+          payload: '{"tingkat": "penting", "keadaan": "mulai"}'
+
+  - id: listrik_kembali
+    alias: PLN kembali
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.ups_daya_listrik
+        to: "on"
+    action:
+      - service: mqtt.publish
+        data:
+          topic: rumah/kejadian/padam_listrik
+          payload: >
+            {"tingkat": "info", "keadaan": "pulih",
+             "durasi_detik": {{ (as_timestamp(now())
+                - as_timestamp(trigger.from_state.last_changed)) | int(0) }}}

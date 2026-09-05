@@ -1,0 +1,102 @@
+# Templat ESPHome untuk Sonoff MINI R4 dan sekerabatnya.
+# Salin per perangkat, ganti substitutions, lalu unggah lewat dasbor ESPHome.
+#
+# PERINGATAN SEBELUM MEM-FLASH
+#   Jalur serial bekerja pada 3,3 volt. JANGAN pernah memberi 5 volt.
+#   JANGAN menyambungkan listrik 220 volt saat adaptor serial masih terpasang —
+#   sebagian modul Sonoff tidak memisahkan jalur listriknya dari jalur data,
+#   dan itu merusak laptop sekaligus perangkatnya.
+
+substitutions:
+  nama: dapur-lampu
+  nama_tampil: Dapur lampu
+  ruang: dapur
+
+esphome:
+  name: ${nama}
+  friendly_name: ${nama_tampil}
+  on_boot:
+    priority: -100
+    then:
+      - logger.log: "Perangkat siap"
+
+esp8266:
+  board: esp01_1m
+  restore_from_flash: true
+
+logger:
+  level: INFO
+  baud_rate: 0          # matikan log serial setelah selesai flashing
+
+api:
+  encryption:
+    key: !secret api_key
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  # Perangkat tetap bekerja walaupun titik akses sempat mati
+  reboot_timeout: 0s
+  ap:
+    ssid: "${nama}-darurat"
+    password: !secret ota_password
+
+captive_portal:
+
+# Menerbitkan langsung ke broker, tanpa melewati Home Assistant.
+# Konsekuensinya jalur data pemantauan tetap hidup saat HA dimulai ulang.
+mqtt:
+  broker: !secret mqtt_host
+  username: !secret mqtt_user
+  password: !secret mqtt_password
+  topic_prefix: ${nama}
+  discovery: false          # penemuan diurus API asli, bukan MQTT
+  birth_message:
+    topic: rumah/kejadian/perangkat_daring
+    payload: '{"perangkat": "${nama}", "tingkat": "info"}'
+  will_message:
+    topic: rumah/kejadian/perangkat_luring
+    payload: '{"perangkat": "${nama}", "tingkat": "penting"}'
+
+# --- Saklar fisik tetap berfungsi walaupun seluruh sistem mati ---
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO4
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "${nama_tampil} saklar"
+    id: saklar_fisik
+    on_press:
+      - switch.toggle: relay
+    internal: true
+
+switch:
+  - platform: gpio
+    pin: GPIO12
+    name: "${nama_tampil}"
+    id: relay
+    restore_mode: RESTORE_DEFAULT_OFF
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: true
+
+sensor:
+  - platform: uptime
+    name: "${nama_tampil} waktu nyala"
+    id: waktu_nyala
+    update_interval: 300s
+
+  - platform: wifi_signal
+    name: "${nama_tampil} sinyal"
+    update_interval: 300s
+
+text_sensor:
+  - platform: version
+    name: "${nama_tampil} versi"
