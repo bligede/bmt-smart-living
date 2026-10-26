@@ -1,0 +1,1218 @@
+{
+  "version": 1,
+  "seed": 25102026,
+  "profiles": [
+    {
+      "id": "a",
+      "tier": "basic",
+      "kind": "private",
+      "hasTank": true,
+      "rooms": [
+        "living",
+        "bedroom",
+        "kitchen",
+        "bathroom",
+        "terrace"
+      ],
+      "powerKw": 1.84,
+      "voltage": 228,
+      "todayKwh": 14.2,
+      "monthKwh": 318,
+      "tankPercent": 68,
+      "waterLitres": 312,
+      "wifiDevices": 17,
+      "cameras": [
+        "frontGate",
+        "carport"
+      ],
+      "devices": [
+        {
+          "id": "main-light",
+          "kind": "mainLight",
+          "room": "living",
+          "capabilities": [
+            "switchable",
+            "dimmer"
+          ],
+          "status": "on",
+          "value": 72,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "reading-light",
+          "kind": "readingLight",
+          "room": "living",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "porch-light",
+          "kind": "porchLight",
+          "room": "terrace",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "ac",
+          "kind": "airConditioner",
+          "room": "bedroom",
+          "capabilities": [
+            "climate"
+          ],
+          "status": "off",
+          "value": 24,
+          "cloud": false,
+          "oneWay": true,
+          "batteryPowered": false
+        },
+        {
+          "id": "curtain",
+          "kind": "curtain",
+          "room": "living",
+          "capabilities": [
+            "curtain"
+          ],
+          "status": "off",
+          "value": 60,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "door-lock",
+          "kind": "doorLock",
+          "room": "terrace",
+          "capabilities": [
+            "lock"
+          ],
+          "status": "off",
+          "value": 82,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": true
+        },
+        {
+          "id": "gate-motor",
+          "kind": "gateMotor",
+          "room": "living",
+          "capabilities": [
+            "lock"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "alarm",
+          "kind": "alarmSiren",
+          "room": "terrace",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "water-valve",
+          "kind": "waterValve",
+          "room": "kitchen",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "on",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "pump",
+          "kind": "pump",
+          "room": "bathroom",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "kitchen-plug",
+          "kind": "kitchenPlug",
+          "room": "kitchen",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "on",
+          "value": 90,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "exhaust-fan",
+          "kind": "exhaustFan",
+          "room": "kitchen",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "water-heater",
+          "kind": "waterHeater",
+          "room": "bathroom",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "on",
+          "value": 1200,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "door-sensor",
+          "kind": "doorSensor",
+          "room": "terrace",
+          "capabilities": [
+            "sensor"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": true
+        },
+        {
+          "id": "leak-sensor",
+          "kind": "leakSensor",
+          "room": "kitchen",
+          "capabilities": [
+            "sensor"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": true
+        },
+        {
+          "id": "cloud-robot",
+          "kind": "cloudRobot",
+          "room": "living",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": true,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "kitchen-circuit",
+          "kind": "kitchenCircuit",
+          "room": "kitchen",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "on",
+          "value": 830,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        }
+      ],
+      "scenes": [
+        {
+          "id": "morning",
+          "lightsOn": true,
+          "acOn": false,
+          "curtainOpen": false,
+          "hour": 7,
+          "minute": 0,
+          "scheduled": false
+        },
+        {
+          "id": "night",
+          "lightsOn": false,
+          "acOn": false,
+          "curtainOpen": false,
+          "hour": 22,
+          "minute": 0,
+          "scheduled": false
+        },
+        {
+          "id": "guest",
+          "lightsOn": true,
+          "acOn": false,
+          "curtainOpen": true,
+          "hour": 17,
+          "minute": 0,
+          "scheduled": false
+        },
+        {
+          "id": "away",
+          "lightsOn": false,
+          "acOn": false,
+          "curtainOpen": false,
+          "hour": 8,
+          "minute": 0,
+          "scheduled": false
+        }
+      ],
+      "members": [
+        {
+          "id": "owner",
+          "role": "owner",
+          "active": true
+        },
+        {
+          "id": "family",
+          "role": "family",
+          "active": true
+        },
+        {
+          "id": "technician",
+          "role": "technician",
+          "active": false
+        }
+      ],
+      "weekKwh": [
+        13.8,
+        14.2,
+        12.7,
+        15.1,
+        14.6,
+        13.9,
+        14.2
+      ],
+      "dailyKwh": [
+        11.5,
+        13.2,
+        14.9,
+        12.3,
+        14,
+        15.7,
+        13.1,
+        14.8,
+        12.2,
+        13.9,
+        15.6,
+        13,
+        14.7,
+        12.1,
+        13.8,
+        15.5,
+        12.9,
+        14.6,
+        12,
+        13.7,
+        15.4,
+        12.8,
+        14.5,
+        11.9,
+        13.6
+      ],
+      "previousMonthKwh": 345,
+      "cameraEvents": [
+        {
+          "id": -1,
+          "camera": "frontGate",
+          "time": "2026-10-25T04:15:00Z",
+          "kind": "motion"
+        },
+        {
+          "id": -2,
+          "camera": "frontGate",
+          "time": "2026-10-25T05:25:00Z",
+          "kind": "person"
+        },
+        {
+          "id": -3,
+          "camera": "frontGate",
+          "time": "2026-10-25T05:45:00Z",
+          "kind": "vehicle"
+        },
+        {
+          "id": -4,
+          "camera": "carport",
+          "time": "2026-10-25T04:15:00Z",
+          "kind": "motion"
+        },
+        {
+          "id": -5,
+          "camera": "carport",
+          "time": "2026-10-25T05:25:00Z",
+          "kind": "person"
+        },
+        {
+          "id": -6,
+          "camera": "carport",
+          "time": "2026-10-25T05:45:00Z",
+          "kind": "vehicle"
+        }
+      ]
+    },
+    {
+      "id": "b",
+      "tier": "medium",
+      "kind": "private",
+      "hasTank": true,
+      "rooms": [
+        "living",
+        "bedroom",
+        "kitchen",
+        "bathroom",
+        "terrace",
+        "bedroomTwo",
+        "carport"
+      ],
+      "powerKw": 1.84,
+      "voltage": 228,
+      "todayKwh": 14.2,
+      "monthKwh": 318,
+      "tankPercent": 68,
+      "waterLitres": 312,
+      "wifiDevices": 17,
+      "cameras": [
+        "frontGate",
+        "carport",
+        "terrace",
+        "living"
+      ],
+      "devices": [
+        {
+          "id": "main-light",
+          "kind": "mainLight",
+          "room": "living",
+          "capabilities": [
+            "switchable",
+            "dimmer"
+          ],
+          "status": "on",
+          "value": 72,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "reading-light",
+          "kind": "readingLight",
+          "room": "living",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "porch-light",
+          "kind": "porchLight",
+          "room": "terrace",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "ac",
+          "kind": "airConditioner",
+          "room": "bedroom",
+          "capabilities": [
+            "climate"
+          ],
+          "status": "off",
+          "value": 24,
+          "cloud": false,
+          "oneWay": true,
+          "batteryPowered": false
+        },
+        {
+          "id": "curtain",
+          "kind": "curtain",
+          "room": "living",
+          "capabilities": [
+            "curtain"
+          ],
+          "status": "off",
+          "value": 60,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "door-lock",
+          "kind": "doorLock",
+          "room": "terrace",
+          "capabilities": [
+            "lock"
+          ],
+          "status": "off",
+          "value": 82,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": true
+        },
+        {
+          "id": "gate-motor",
+          "kind": "gateMotor",
+          "room": "living",
+          "capabilities": [
+            "lock"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "alarm",
+          "kind": "alarmSiren",
+          "room": "terrace",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "water-valve",
+          "kind": "waterValve",
+          "room": "kitchen",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "on",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "pump",
+          "kind": "pump",
+          "room": "bathroom",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "kitchen-plug",
+          "kind": "kitchenPlug",
+          "room": "kitchen",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "on",
+          "value": 90,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "exhaust-fan",
+          "kind": "exhaustFan",
+          "room": "kitchen",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "water-heater",
+          "kind": "waterHeater",
+          "room": "bathroom",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "on",
+          "value": 1200,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "door-sensor",
+          "kind": "doorSensor",
+          "room": "terrace",
+          "capabilities": [
+            "sensor"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": true
+        },
+        {
+          "id": "leak-sensor",
+          "kind": "leakSensor",
+          "room": "kitchen",
+          "capabilities": [
+            "sensor"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": true
+        },
+        {
+          "id": "cloud-robot",
+          "kind": "cloudRobot",
+          "room": "living",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": true,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "kitchen-circuit",
+          "kind": "kitchenCircuit",
+          "room": "kitchen",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "on",
+          "value": 830,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        }
+      ],
+      "scenes": [
+        {
+          "id": "morning",
+          "lightsOn": true,
+          "acOn": false,
+          "curtainOpen": false,
+          "hour": 7,
+          "minute": 0,
+          "scheduled": false
+        },
+        {
+          "id": "night",
+          "lightsOn": false,
+          "acOn": false,
+          "curtainOpen": false,
+          "hour": 22,
+          "minute": 0,
+          "scheduled": false
+        },
+        {
+          "id": "guest",
+          "lightsOn": true,
+          "acOn": false,
+          "curtainOpen": true,
+          "hour": 17,
+          "minute": 0,
+          "scheduled": false
+        },
+        {
+          "id": "away",
+          "lightsOn": false,
+          "acOn": false,
+          "curtainOpen": false,
+          "hour": 8,
+          "minute": 0,
+          "scheduled": false
+        }
+      ],
+      "members": [
+        {
+          "id": "owner",
+          "role": "owner",
+          "active": true
+        },
+        {
+          "id": "family",
+          "role": "family",
+          "active": true
+        },
+        {
+          "id": "technician",
+          "role": "technician",
+          "active": false
+        }
+      ],
+      "weekKwh": [
+        13.8,
+        14.2,
+        12.7,
+        15.1,
+        14.6,
+        13.9,
+        14.2
+      ],
+      "dailyKwh": [
+        11.5,
+        13.2,
+        14.9,
+        12.3,
+        14,
+        15.7,
+        13.1,
+        14.8,
+        12.2,
+        13.9,
+        15.6,
+        13,
+        14.7,
+        12.1,
+        13.8,
+        15.5,
+        12.9,
+        14.6,
+        12,
+        13.7,
+        15.4,
+        12.8,
+        14.5,
+        11.9,
+        13.6
+      ],
+      "previousMonthKwh": 345,
+      "cameraEvents": [
+        {
+          "id": -1,
+          "camera": "frontGate",
+          "time": "2026-10-25T04:15:00Z",
+          "kind": "motion"
+        },
+        {
+          "id": -2,
+          "camera": "frontGate",
+          "time": "2026-10-25T05:25:00Z",
+          "kind": "person"
+        },
+        {
+          "id": -3,
+          "camera": "frontGate",
+          "time": "2026-10-25T05:45:00Z",
+          "kind": "vehicle"
+        },
+        {
+          "id": -4,
+          "camera": "carport",
+          "time": "2026-10-25T04:15:00Z",
+          "kind": "motion"
+        },
+        {
+          "id": -5,
+          "camera": "carport",
+          "time": "2026-10-25T05:25:00Z",
+          "kind": "person"
+        },
+        {
+          "id": -6,
+          "camera": "carport",
+          "time": "2026-10-25T05:45:00Z",
+          "kind": "vehicle"
+        },
+        {
+          "id": -7,
+          "camera": "terrace",
+          "time": "2026-10-25T04:15:00Z",
+          "kind": "motion"
+        },
+        {
+          "id": -8,
+          "camera": "terrace",
+          "time": "2026-10-25T05:25:00Z",
+          "kind": "person"
+        },
+        {
+          "id": -9,
+          "camera": "terrace",
+          "time": "2026-10-25T05:45:00Z",
+          "kind": "vehicle"
+        },
+        {
+          "id": -10,
+          "camera": "living",
+          "time": "2026-10-25T04:15:00Z",
+          "kind": "motion"
+        },
+        {
+          "id": -11,
+          "camera": "living",
+          "time": "2026-10-25T05:25:00Z",
+          "kind": "person"
+        },
+        {
+          "id": -12,
+          "camera": "living",
+          "time": "2026-10-25T05:45:00Z",
+          "kind": "vehicle"
+        }
+      ]
+    },
+    {
+      "id": "c",
+      "tier": "high",
+      "kind": "rental",
+      "hasTank": true,
+      "rooms": [
+        "bedroom",
+        "bathroom",
+        "kitchen",
+        "terrace",
+        "gate"
+      ],
+      "powerKw": 1.84,
+      "voltage": 228,
+      "todayKwh": 14.2,
+      "monthKwh": 318,
+      "tankPercent": 68,
+      "waterLitres": 312,
+      "wifiDevices": 17,
+      "cameras": [
+        "frontGate",
+        "carport",
+        "terrace",
+        "gate"
+      ],
+      "devices": [
+        {
+          "id": "main-light",
+          "kind": "mainLight",
+          "room": "bedroom",
+          "capabilities": [
+            "switchable",
+            "dimmer"
+          ],
+          "status": "on",
+          "value": 72,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "reading-light",
+          "kind": "readingLight",
+          "room": "bedroom",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "porch-light",
+          "kind": "porchLight",
+          "room": "terrace",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "ac",
+          "kind": "airConditioner",
+          "room": "bedroom",
+          "capabilities": [
+            "climate"
+          ],
+          "status": "off",
+          "value": 24,
+          "cloud": false,
+          "oneWay": true,
+          "batteryPowered": false
+        },
+        {
+          "id": "curtain",
+          "kind": "curtain",
+          "room": "bedroom",
+          "capabilities": [
+            "curtain"
+          ],
+          "status": "off",
+          "value": 60,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "door-lock",
+          "kind": "doorLock",
+          "room": "terrace",
+          "capabilities": [
+            "lock"
+          ],
+          "status": "off",
+          "value": 82,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": true
+        },
+        {
+          "id": "gate-motor",
+          "kind": "gateMotor",
+          "room": "gate",
+          "capabilities": [
+            "lock"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "alarm",
+          "kind": "alarmSiren",
+          "room": "terrace",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "water-valve",
+          "kind": "waterValve",
+          "room": "kitchen",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "on",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "pump",
+          "kind": "pump",
+          "room": "bathroom",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "kitchen-plug",
+          "kind": "kitchenPlug",
+          "room": "kitchen",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "on",
+          "value": 90,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "exhaust-fan",
+          "kind": "exhaustFan",
+          "room": "kitchen",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "water-heater",
+          "kind": "waterHeater",
+          "room": "bathroom",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "on",
+          "value": 1200,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "door-sensor",
+          "kind": "doorSensor",
+          "room": "terrace",
+          "capabilities": [
+            "sensor"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": true
+        },
+        {
+          "id": "leak-sensor",
+          "kind": "leakSensor",
+          "room": "kitchen",
+          "capabilities": [
+            "sensor"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": true
+        },
+        {
+          "id": "cloud-robot",
+          "kind": "cloudRobot",
+          "room": "bedroom",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "off",
+          "value": 0,
+          "cloud": true,
+          "oneWay": false,
+          "batteryPowered": false
+        },
+        {
+          "id": "kitchen-circuit",
+          "kind": "kitchenCircuit",
+          "room": "kitchen",
+          "capabilities": [
+            "switchable"
+          ],
+          "status": "on",
+          "value": 830,
+          "cloud": false,
+          "oneWay": false,
+          "batteryPowered": false
+        }
+      ],
+      "scenes": [
+        {
+          "id": "morning",
+          "lightsOn": true,
+          "acOn": false,
+          "curtainOpen": false,
+          "hour": 7,
+          "minute": 0,
+          "scheduled": false
+        },
+        {
+          "id": "night",
+          "lightsOn": false,
+          "acOn": false,
+          "curtainOpen": false,
+          "hour": 22,
+          "minute": 0,
+          "scheduled": false
+        },
+        {
+          "id": "guest",
+          "lightsOn": true,
+          "acOn": false,
+          "curtainOpen": true,
+          "hour": 17,
+          "minute": 0,
+          "scheduled": false
+        },
+        {
+          "id": "away",
+          "lightsOn": false,
+          "acOn": false,
+          "curtainOpen": false,
+          "hour": 8,
+          "minute": 0,
+          "scheduled": false
+        }
+      ],
+      "members": [
+        {
+          "id": "owner",
+          "role": "owner",
+          "active": true
+        },
+        {
+          "id": "family",
+          "role": "family",
+          "active": true
+        },
+        {
+          "id": "technician",
+          "role": "technician",
+          "active": false
+        }
+      ],
+      "weekKwh": [
+        13.8,
+        14.2,
+        12.7,
+        15.1,
+        14.6,
+        13.9,
+        14.2
+      ],
+      "dailyKwh": [
+        11.5,
+        13.2,
+        14.9,
+        12.3,
+        14,
+        15.7,
+        13.1,
+        14.8,
+        12.2,
+        13.9,
+        15.6,
+        13,
+        14.7,
+        12.1,
+        13.8,
+        15.5,
+        12.9,
+        14.6,
+        12,
+        13.7,
+        15.4,
+        12.8,
+        14.5,
+        11.9,
+        13.6
+      ],
+      "previousMonthKwh": 345,
+      "cameraEvents": [
+        {
+          "id": -1,
+          "camera": "frontGate",
+          "time": "2026-10-25T04:15:00Z",
+          "kind": "motion"
+        },
+        {
+          "id": -2,
+          "camera": "frontGate",
+          "time": "2026-10-25T05:25:00Z",
+          "kind": "person"
+        },
+        {
+          "id": -3,
+          "camera": "frontGate",
+          "time": "2026-10-25T05:45:00Z",
+          "kind": "vehicle"
+        },
+        {
+          "id": -4,
+          "camera": "carport",
+          "time": "2026-10-25T04:15:00Z",
+          "kind": "motion"
+        },
+        {
+          "id": -5,
+          "camera": "carport",
+          "time": "2026-10-25T05:25:00Z",
+          "kind": "person"
+        },
+        {
+          "id": -6,
+          "camera": "carport",
+          "time": "2026-10-25T05:45:00Z",
+          "kind": "vehicle"
+        },
+        {
+          "id": -7,
+          "camera": "terrace",
+          "time": "2026-10-25T04:15:00Z",
+          "kind": "motion"
+        },
+        {
+          "id": -8,
+          "camera": "terrace",
+          "time": "2026-10-25T05:25:00Z",
+          "kind": "person"
+        },
+        {
+          "id": -9,
+          "camera": "terrace",
+          "time": "2026-10-25T05:45:00Z",
+          "kind": "vehicle"
+        },
+        {
+          "id": -10,
+          "camera": "gate",
+          "time": "2026-10-25T04:15:00Z",
+          "kind": "motion"
+        },
+        {
+          "id": -11,
+          "camera": "gate",
+          "time": "2026-10-25T05:25:00Z",
+          "kind": "person"
+        },
+        {
+          "id": -12,
+          "camera": "gate",
+          "time": "2026-10-25T05:45:00Z",
+          "kind": "vehicle"
+        }
+      ]
+    }
+  ]
+}

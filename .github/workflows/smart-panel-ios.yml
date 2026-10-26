@@ -1,0 +1,52 @@
+name: Smart Panel iOS
+on:
+  push:
+    paths:
+      - 'apps/smart-panel-bmt/**'
+      - '.github/workflows/smart-panel-ios.yml'
+  pull_request:
+    paths:
+      - 'apps/smart-panel-bmt/**'
+      - '.github/workflows/smart-panel-ios.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: smart-panel-ios-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  simulator:
+    runs-on: macos-15
+    timeout-minutes: 35
+    defaults:
+      run:
+        working-directory: apps/smart-panel-bmt
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.9'
+          channel: stable
+          cache: true
+      - name: Check and build simulator
+        run: bash tool/build-ios.sh
+      - name: Launch on iPhone simulator
+        run: |
+          DEVICE_ID=$(xcrun simctl list devices available -j | ruby -rjson -e 'j=JSON.parse(STDIN.read); d=j.fetch("devices").values.flatten.find { |x| x["name"].start_with?("iPhone") }; abort "No iPhone simulator" unless d; puts d.fetch("udid")')
+          xcrun simctl boot "$DEVICE_ID"
+          xcrun simctl bootstatus "$DEVICE_ID" -b
+          xcrun simctl install "$DEVICE_ID" build/ios/iphonesimulator/Runner.app
+          xcrun simctl launch "$DEVICE_ID" com.balimikroteknologi.smartpanel.demo
+          sleep 10
+          xcrun simctl spawn "$DEVICE_ID" launchctl list | grep -F com.balimikroteknologi.smartpanel.demo
+          xcrun simctl io "$DEVICE_ID" screenshot ios-simulator-home.png
+      - name: Package simulator app
+        run: ditto -c -k --sequesterRsrc --keepParent build/ios/iphonesimulator/Runner.app smart-panel-bmt-ios-simulator.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: smart-panel-bmt-ios-simulator
+          path: |
+            apps/smart-panel-bmt/smart-panel-bmt-ios-simulator.zip
+            apps/smart-panel-bmt/ios-simulator-home.png
+          if-no-files-found: error
+          retention-days: 14

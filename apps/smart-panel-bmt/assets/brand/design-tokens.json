@@ -1,0 +1,94 @@
+{
+  "_catatan": "Token BMT dari skill bmt-formal-docs (identitas Eco-Tech: hijau logo dan charcoal). Bagian 'turunan_aplikasi' adalah usulan untuk layar ponsel dan perlu diverifikasi kontrasnya (WCAG AA) pada titik berhenti B.",
+  "versi": "0.1",
+  "tanggal": "2026-10-25",
+  "aturan_inti": [
+    "Hijau #04FB2D (green500) TIDAK PERNAH dipakai sebagai teks di atas putih (kontras 1,41:1). Ia hanya menyala di atas permukaan charcoal.",
+    "Teks hijau di atas putih memakai green700 #15803D.",
+    "Warna teks isi bukan hitam murni: ink800 #373435 (warna garis logo).",
+    "Permukaan jangkar (kartu status utama, app bar, kartu angka) berupa charcoal; badan layar putih atau slate50 pada tema terang."
+  ],
+  "warna": {
+    "green50": "#EAFEEF",
+    "green100": "#C7FBD3",
+    "green300": "#5CF878",
+    "green500": "#04FB2D",
+    "green600": "#12A437",
+    "green700": "#15803D",
+    "green800": "#14622F",
+    "green900": "#0E3A1C",
+    "ink950": "#141414",
+    "ink900": "#1A1A1A",
+    "ink850": "#282828",
+    "ink800": "#373435",
+    "ink700": "#4A4848",
+    "ink600": "#615F60",
+    "ink500": "#7C7A7B",
+    "ink300": "#B7B5B6",
+    "slate50": "#F6F7F7",
+    "slate100": "#EDEEEE",
+    "slate200": "#E0E2E2",
+    "slate300": "#CCCFCF",
+    "slate400": "#9DA1A1",
+    "paper": "#FFFFFF",
+    "onDark": "#F2F4F3",
+    "onDarkMuted": "#A9ADAB"
+  },
+  "status": {
+    "aman":      { "teks": "#14622F", "latar": "#EAFEEF", "garis": "#15803D" },
+    "perhatian": { "teks": "#A85B12", "latar": "#FBF1E4", "garis": "#A85B12" },
+    "darurat":   { "teks": "#A82828", "latar": "#FBEBEB", "garis": "#A82828" },
+    "info":      { "teks": "#2B5C9C", "latar": "#EAF0F8", "garis": "#2B5C9C" },
+    "tidak_terjangkau": { "teks": "#615F60", "latar": "#F6F7F7", "garis": "#CCCFCF" }
+  },
+  "tema": {
+    "terang": {
+      "latar": "paper",
+      "latar_alt": "slate50",
+      "permukaan_jangkar": "ink850",
+      "teks": "ink800",
+      "teks_sekunder": "ink600",
+      "garis": "slate200",
+      "aksen_teks": "green700",
+      "aksen_pada_jangkar": "green500"
+    },
+    "gelap": {
+      "latar": "ink950",
+      "latar_alt": "ink900",
+      "permukaan_jangkar": "ink850",
+      "teks": "onDark",
+      "teks_sekunder": "onDarkMuted",
+      "garis": "ink700",
+      "aksen_teks": "green300",
+      "aksen_pada_jangkar": "green500"
+    }
+  },
+  "turunan_aplikasi": {
+    "_catatan": "Usulan, bukan token resmi. Verifikasi kontras sebelum dipakai.",
+    "status_pada_gelap": {
+      "aman": "#5CF878",
+      "perhatian": "#E8A862",
+      "darurat": "#FF8A8A",
+      "info": "#7FB0EC"
+    },
+    "radius": { "chip": 10, "kartu": 8, "lembar": 16 },
+    "jarak_dp": [4, 8, 12, 16, 24, 32],
+    "target_sentuh_min_dp": 48,
+    "tipografi": {
+      "keluarga": "Inter (dibundel di assets, lisensi OFL). Angka memakai tabular figures.",
+      "skala": {
+        "tampilan": { "ukuran": 28, "tinggi_baris": 34, "berat": 700 },
+        "judul":    { "ukuran": 20, "tinggi_baris": 26, "berat": 700 },
+        "isi":      { "ukuran": 15, "tinggi_baris": 22, "berat": 400 },
+        "label":    { "ukuran": 13, "tinggi_baris": 18, "berat": 600 },
+        "keterangan": { "ukuran": 12, "tinggi_baris": 16, "berat": 400 },
+        "angka_besar": { "ukuran": 40, "tinggi_baris": 44, "berat": 700 }
+      }
+    },
+    "gerak": {
+      "durasi_ms": { "cepat": 150, "standar": 220, "lambat": 320 },
+      "kurva": "easeOutCubic untuk masuk, easeInCubic untuk keluar",
+      "hormati_kurangi_gerak": true
+    }
+  }
+}

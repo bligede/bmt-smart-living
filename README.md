@@ -2,6 +2,8 @@
 
 Seluruh perangkat lunak yang berjalan di satu Raspberry Pi, di dalam rumah pelanggan.
 
+Aplikasi demo Android dan iPhone tersedia di [apps/smart-panel-bmt](apps/smart-panel-bmt/README.md). Demo Flutter ini memakai data simulasi lokal; panduan build iOS ada di [dokumen iOS](apps/smart-panel-bmt/docs/ios.md).
+
 Dokumen pendamping: **Panduan Integrasi Perangkat, Basis Data, dan Dasbor v1.0**.
 Kalau ada yang tidak jelas di sini, jawabannya ada di sana.
 
