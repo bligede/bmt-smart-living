@@ -225,22 +225,25 @@ class AppShell extends ConsumerWidget {
             ),
         ],
       ),
-      body: ConditionView(
-        condition: (guest || technician || path == '/more')
-            ? s.condition
-            : ViewCondition.normal,
-        onRetry: () =>
-            ref.read(demoProvider.notifier).condition(ViewCondition.normal),
-        child: guest
-            ? const GuestScreen()
-            : technician
-            ? const _TechnicianPreview()
-            : s.role == UserRole.family &&
-                  !s.home.members.any(
-                    (m) => m.active && m.role == UserRole.family,
-                  )
-            ? Center(child: StateMessage(title: l.noPermission))
-            : child,
+      body: SafeArea(
+        top: false,
+        child: ConditionView(
+          condition: (guest || technician || path == '/more')
+              ? s.condition
+              : ViewCondition.normal,
+          onRetry: () =>
+              ref.read(demoProvider.notifier).condition(ViewCondition.normal),
+          child: guest
+              ? const GuestScreen()
+              : technician
+              ? const _TechnicianPreview()
+              : s.role == UserRole.family &&
+                    !s.home.members.any(
+                      (m) => m.active && m.role == UserRole.family,
+                    )
+              ? Center(child: StateMessage(title: l.noPermission))
+              : child,
+        ),
       ),
       bottomNavigationBar: guest || technician
           ? null

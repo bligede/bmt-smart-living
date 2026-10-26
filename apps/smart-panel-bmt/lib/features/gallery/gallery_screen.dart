@@ -242,49 +242,55 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
     ];
     return Scaffold(
       appBar: AppBar(title: Text(l.gallery)),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
-        children: [
-          Text(l.gallerySubtitle, style: Theme.of(context).textTheme.bodyLarge),
-          const SizedBox(height: 16),
-          SmallBadge(l.simulation, icon: Icons.science_outlined),
-          SectionTitle(l.galleryStates),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final condition in ViewCondition.values)
-                ChoiceChip(
-                  label: Text(l.conditionName(condition)),
-                  selected: s.galleryCondition == condition,
-                  onSelected: (_) => c.galleryCondition(condition),
+      body: SafeArea(
+        top: false,
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+          children: [
+            Text(
+              l.gallerySubtitle,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            const SizedBox(height: 16),
+            SmallBadge(l.simulation, icon: Icons.science_outlined),
+            SectionTitle(l.galleryStates),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final condition in ViewCondition.values)
+                  ChoiceChip(
+                    label: Text(l.conditionName(condition)),
+                    selected: s.galleryCondition == condition,
+                    onSelected: (_) => c.galleryCondition(condition),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            DropdownButtonFormField<int>(
+              key: ValueKey(_section),
+              initialValue: _section ?? -1,
+              isExpanded: true,
+              decoration: InputDecoration(labelText: l.filter),
+              items: [
+                DropdownMenuItem(value: -1, child: Text(l.all)),
+                for (var i = 0; i < examples.length; i++)
+                  DropdownMenuItem(value: i, child: Text(examples[i].$1)),
+              ],
+              onChanged: (v) => setState(() => _section = v == -1 ? null : v),
+            ),
+            for (var i = 0; i < examples.length; i++)
+              if (_section == null || _section == i) ...[
+                SectionTitle(examples[i].$1),
+                ConditionView(
+                  condition: s.galleryCondition,
+                  name: examples[i].$1,
+                  onRetry: () => c.galleryCondition(ViewCondition.normal),
+                  child: examples[i].$2,
                 ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          DropdownButtonFormField<int>(
-            key: ValueKey(_section),
-            initialValue: _section ?? -1,
-            isExpanded: true,
-            decoration: InputDecoration(labelText: l.filter),
-            items: [
-              DropdownMenuItem(value: -1, child: Text(l.all)),
-              for (var i = 0; i < examples.length; i++)
-                DropdownMenuItem(value: i, child: Text(examples[i].$1)),
-            ],
-            onChanged: (v) => setState(() => _section = v == -1 ? null : v),
-          ),
-          for (var i = 0; i < examples.length; i++)
-            if (_section == null || _section == i) ...[
-              SectionTitle(examples[i].$1),
-              ConditionView(
-                condition: s.galleryCondition,
-                name: examples[i].$1,
-                onRetry: () => c.galleryCondition(ViewCondition.normal),
-                child: examples[i].$2,
-              ),
-            ],
-        ],
+              ],
+          ],
+        ),
       ),
     );
   }

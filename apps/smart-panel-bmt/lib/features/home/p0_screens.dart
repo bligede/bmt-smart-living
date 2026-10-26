@@ -17,23 +17,26 @@ class ReviewPage extends ConsumerWidget {
     final s = ref.watch(demoProvider), c = ref.read(demoProvider.notifier);
     return Scaffold(
       appBar: AppBar(title: Text(title)),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: ConnectionBadge(s.home.connection.path),
-          ),
-          const SizedBox(height: 20),
-          ConditionView(
-            condition: s.condition,
-            onRetry: () => c.condition(ViewCondition.normal),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: children,
+      body: SafeArea(
+        top: false,
+        child: ListView(
+          padding: const EdgeInsets.all(20),
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: ConnectionBadge(s.home.connection.path),
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+            ConditionView(
+              condition: s.condition,
+              onRetry: () => c.condition(ViewCondition.normal),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: children,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

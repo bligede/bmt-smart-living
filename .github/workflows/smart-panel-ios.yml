@@ -31,6 +31,7 @@ jobs:
       - name: Check and build simulator
         run: bash tool/build-ios.sh
       - name: Launch on iPhone simulator
+        timeout-minutes: 8
         run: |
           DEVICE_ID=$(xcrun simctl list devices available -j | ruby -rjson -e 'j=JSON.parse(STDIN.read); d=j.fetch("devices").values.flatten.find { |x| x["name"].start_with?("iPhone") }; abort "No iPhone simulator" unless d; puts d.fetch("udid")')
           xcrun simctl boot "$DEVICE_ID"
